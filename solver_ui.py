@@ -1,22 +1,17 @@
 from tkinter import *
-import example_puzzles
-import solver
+import solve
 
 root = Tk()
 root.title('Sudoku Solver')
-#root.geometry('400x500')
 
 mylabel = Label(root, text='Fill in the numbers and click solve').grid(row=0, column=0,columnspan=10)
 
 def callback(P):
     if (str.isdigit(P) and int(P) in range(1,10)) or P == "":
-        #if str.isdigit(P) and int(P) in range(1,10):
-            #entry.focus_set()
         return True
     else:
         return False
 
-# Create the grid
 def beg():
     cells = {}
     grid = []
@@ -69,5 +64,3 @@ clearer.grid(row=11, column=3, pady=30)
 solver.grid(row=11, column=7, pady=30)
 
 root.mainloop()
-
-#print(solve.solve((example_puzzles.easy)))
