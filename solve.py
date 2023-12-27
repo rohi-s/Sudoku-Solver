@@ -1,4 +1,5 @@
 import numpy as np
+import puzzles
 from copy import deepcopy
 
 def solve(sudoku_to_solve):
@@ -127,3 +128,27 @@ def solve(sudoku_to_solve):
     gridsss = filtered_solve(sudoku)
 
     return gridsss
+
+# pass an array of unsolved puzzle with blank spaces filled with zeros(0)
+# 
+# Example :
+# 
+# print(solve(puzzles.easy)) 
+# 
+# or 
+# 
+# print(
+#     solve(
+#             [
+#                 [7, 5, 3, 0, 4, 0, 9, 6, 0],
+#                 [0, 4, 0, 7, 6, 0, 8, 0, 0],
+#                 [0, 0, 1, 0, 2, 5, 0, 0, 3],
+#                 [0, 0, 8, 0, 1, 0, 6, 0, 0],
+#                 [0, 0, 6, 0, 8, 9, 1, 3, 0],
+#                 [4, 0, 0, 0, 3, 7, 0, 9, 0],
+#                 [6, 3, 7, 8, 0, 0, 0, 0, 0],
+#                 [0, 0, 0, 0, 0, 0, 7, 8, 9],
+#                 [5, 0, 9, 2, 7, 0, 0, 4, 0]
+#             ]
+#         )
+#     ) 
