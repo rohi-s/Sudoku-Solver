@@ -1,9 +1,12 @@
 import numpy as np
 import puzzles
 from copy import deepcopy
+import time
 
 def solve(sudoku_to_solve):
     sudoku = np.array(sudoku_to_solve)
+
+    countVar = [0]
 
     def get_subgrids(grid):
             subgrids = []
@@ -115,8 +118,12 @@ def solve(sudoku_to_solve):
                         if solution is not None:
                             return solution
                         grid[i][j] = 0
+        return None
 
     def filtered_solve(grid):
+        countVar[0] += 1
+        if countVar[0] > 5:
+            return None
         candidates = filter_candidates(grid)
         grid = fill_sing(grid, candidates)
         if is_solution(grid):
@@ -124,10 +131,15 @@ def solve(sudoku_to_solve):
         if not is_validguess(grid):
             return None
         return guessing(grid, candidates)
-
+    
+    begin = time.time()
     gridsss = filtered_solve(sudoku)
+    end = time.time()
 
-    return gridsss
+    tme = end - begin
+    if gridsss is None:
+        return None, tme
+    return gridsss, tme
 
 # pass an array of unsolved puzzle with blank spaces filled with zeros(0)
 # 
@@ -152,3 +164,4 @@ def solve(sudoku_to_solve):
 #             ]
 #         )
 #     ) 
+

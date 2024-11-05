@@ -1,4 +1,5 @@
 from tkinter import *
+import puzzles
 import solve
 
 root = Tk()
@@ -29,19 +30,23 @@ def beg():
             cells[(row, column)] = cell
             
             vcmd = (cells[row, column].register(callback))
+            
             e = Entry(cells[row, column], width=3, justify='center', validate='all', validatecommand=(vcmd, '%P'))
             e.pack()
             rgrid.append(e)
         grid.append(rgrid)
     return grid
-grids = beg()
 
 def clear():
     for i in range(9):
         for j in range(9):
             grids[i][j].delete(0, 'end')
+            grids[i][j].config(bg='white')
 
 def solvebutt():
+    timeLabel.config(text=f'Time Taken : Computing...')
+    root.update() 
+    
     gridtsolve = []
     for i in range(9):
         gridtsolve_r = []
@@ -50,17 +55,56 @@ def solvebutt():
                 gridtsolve_r.append(0)
             else:
                 gridtsolve_r.append(int(grids[i][j].get()))
+                grids[i][j].config(bg='lightgray')
         gridtsolve.append(gridtsolve_r)
-    answer = solve.solve(gridtsolve)
+    answer, tme = solve.solve(gridtsolve)
+    try:
+        answer, tme = solve.solve(gridtsolve)
+        if answer is None:
+            timeLabel.config(text='Cannot Solve.')
+        else:
+            for i in range(9):
+                for j in range(9):
+                    if grids[i][j].get() == '':
+                        grids[i][j].insert(0, answer[i][j])
+                        grids[i][j].config(bg='white')
+            timeLabel.config(text=f'Time Taken : {tme:.6f} s')
+    except Exception as e:
+        timeLabel.config(text='Error in solving.')
+        print(f"An error occurred: {e}")
+    
+        
+
+def fillRand():
+    sudoku = puzzles.any()
+    clear()
     for i in range(9):
         for j in range(9):
-            if grids[i][j].get() == '':
-                grids[i][j].insert(0, answer[i][j])
+            if sudoku[i][j]==0:
+                grids[i][j].insert(0, "")
+                grids[i][j].config(bg='white')
+            else:
+                grids[i][j].insert(0, sudoku[i][j])
+                grids[i][j].config(bg='lightgray')
 
-clearer = Button(root, text='Clear', command=clear)
-solver = Button(root, text='Solve', command=solvebutt)
+grids = beg()  # Your existing function to create the Sudoku grid
 
-clearer.grid(row=11, column=3, pady=30)
-solver.grid(row=11, column=7, pady=30)
+# Create a separate frame for buttons
+button_frame = Frame(root)
+button_frame.grid(row=11, column=0, columnspan=10, pady=20)  # Place button frame below the Sudoku grid
+            
+
+clearer = Button(button_frame, text='Clear', command=clear)
+solver = Button(button_frame, text='Solve', command=solvebutt)
+getRand = Button(button_frame, text='Get Random', command=fillRand)
+timeLabel = Label(button_frame, text='Time Taken : 0.000000 s')
+
+# Arrange buttons inside the button frame
+clearer.grid(row=0, column=0, padx=10)
+solver.grid(row=0, column=1, padx=10)
+getRand.grid(row=0, column=2, padx=10)
+timeLabel.grid(row=1, column=0,columnspan=10)
+
+
 
 root.mainloop()
